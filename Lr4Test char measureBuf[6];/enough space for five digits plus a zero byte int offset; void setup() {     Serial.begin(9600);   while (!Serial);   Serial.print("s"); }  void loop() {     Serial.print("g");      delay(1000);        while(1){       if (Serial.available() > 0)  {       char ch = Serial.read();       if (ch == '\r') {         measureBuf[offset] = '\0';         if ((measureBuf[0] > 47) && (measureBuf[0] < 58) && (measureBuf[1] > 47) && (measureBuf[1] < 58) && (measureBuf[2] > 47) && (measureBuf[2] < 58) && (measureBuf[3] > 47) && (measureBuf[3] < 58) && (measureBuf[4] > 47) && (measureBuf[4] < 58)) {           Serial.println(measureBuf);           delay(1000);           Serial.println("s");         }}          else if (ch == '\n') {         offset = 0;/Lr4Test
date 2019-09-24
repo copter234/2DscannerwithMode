@@ -1,0 +1,35 @@
+
+char measureBuf[6]; // enough space for five digits plus a zero byte
+int offset;
+void setup()
+{
+    Serial.begin(9600);
+  while (!Serial);
+  Serial.print("s");
+}
+
+void loop()
+{
+    Serial.print("g");
+     delay(1000);
+ 
+     while(1){
+      if (Serial.available() > 0)  {
+      char ch = Serial.read();
+      if (ch == '\r') {
+        measureBuf[offset] = '\0';
+        if ((measureBuf[0] > 47) && (measureBuf[0] < 58) && (measureBuf[1] > 47) && (measureBuf[1] < 58) && (measureBuf[2] > 47) && (measureBuf[2] < 58) && (measureBuf[3] > 47) && (measureBuf[3] < 58) && (measureBuf[4] > 47) && (measureBuf[4] < 58)) {
+          Serial.println(measureBuf);
+          delay(1000);
+          Serial.println("s");
+        }}
+         else if (ch == '\n') {
+        offset = 0; // nothing to do, set offset to zero just to be safe
+      }
+      else if (offset < 5)
+        measureBuf[offset++] = ch;
+    }
+}
+
+
+}
